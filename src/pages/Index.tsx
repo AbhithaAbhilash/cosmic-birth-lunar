@@ -1,17 +1,11 @@
 import { useState } from "react";
 import { format } from "date-fns";
-import { CalendarIcon, Download, Share2, Moon } from "lucide-react";
+import { Share2, Moon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
 import { getMoonPhase, MoonPhaseData } from "@/lib/moonPhase";
 import MoonVisualization from "@/components/MoonVisualization";
+import BirthDatePicker from "@/components/BirthDatePicker";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 const Index = () => {
   const [date, setDate] = useState<Date>();
@@ -76,30 +70,7 @@ const Index = () => {
 
               {/* Date Picker */}
               <div className="w-full max-w-xs space-y-4">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        "w-full justify-start text-left font-body h-12 bg-card border-border hover:bg-muted hover:border-primary/50 transition-all duration-300",
-                        !date && "text-muted-foreground"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
-                      {date ? format(date, "MMMM d, yyyy") : "Select your birth date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 bg-card border-border" align="center">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      disabled={(d) => d > new Date()}
-                      initialFocus
-                      className="p-3 pointer-events-auto"
-                    />
-                  </PopoverContent>
-                </Popover>
+                <BirthDatePicker date={date} onSelect={setDate} />
 
                 <Button
                   onClick={handleDiscover}
