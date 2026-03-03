@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { format } from "date-fns";
-import { Share2, Moon } from "lucide-react";
+import { Share2, Moon, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getMoonPhase, MoonPhaseData } from "@/lib/moonPhase";
+import { generateShareImage } from "@/lib/shareImage";
 import MoonVisualization from "@/components/MoonVisualization";
 import BirthDatePicker from "@/components/BirthDatePicker";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const Index = () => {
   const [date, setDate] = useState<Date>();
@@ -27,12 +29,51 @@ const Index = () => {
 
   const handleShare = async () => {
     if (!moonData || !date) return;
-    const text = `On ${format(date, "MMMM d, yyyy")}, the moon was a ${moonData.phaseName} (${moonData.illumination}% illuminated). ${moonData.poeticLine}`;
-    if (navigator.share) {
-      await navigator.share({ title: "My Birth Moon", text });
-    } else {
-      await navigator.clipboard.writeText(text);
+    const dateStr = format(date, "MMMM d, yyyy");
+    
+    try {
+      const blob = await generateShareImage(moonData, dateStr);
+      const file = new File([blob], "my-birth-moon.png", { type: "image/png" });
+      const shareText = `On ${dateStr}, the moon was a ${moonData.phaseName} (${moonData.illumination}% illuminated). ${moonData.poeticLine}\n\nCheck out yours too 🌙\nhttps://cosmic-birth-lunar.lovable.app/`;
+
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({
+          title: "My Birth Moon",
+          text: shareText,
+          files: [file],
+        });
+      } else if (navigator.share) {
+        await navigator.share({ title: "My Birth Moon", text: shareText });
+      } else {
+        // Desktop fallback: download
+        downloadBlob(blob, "my-birth-moon.png");
+        toast.success("Image downloaded! Share it anywhere 🌙");
+      }
+    } catch (e: any) {
+      if (e?.name !== "AbortError") {
+        toast.error("Sharing failed. Try downloading instead.");
+      }
     }
+  };
+
+  const handleDownload = async () => {
+    if (!moonData || !date) return;
+    try {
+      const blob = await generateShareImage(moonData, format(date, "MMMM d, yyyy"));
+      downloadBlob(blob, "my-birth-moon.png");
+      toast.success("Image saved!");
+    } catch {
+      toast.error("Could not generate image.");
+    }
+  };
+
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -148,6 +189,15 @@ const Index = () => {
                   >
                     <Share2 className="w-4 h-4 mr-2" />
                     Share
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleDownload}
+                    className="font-body border-border text-muted-foreground hover:text-foreground hover:border-primary/50"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Download
                   </Button>
                   <Button
                     variant="outline"
