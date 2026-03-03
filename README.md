@@ -1,73 +1,37 @@
-# Welcome to your Lovable project
+🌙 Phase of You
 
-## Project info
+See the moon that watched over the day you were born.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Phase of You is a space-themed web application that lets users enter their date of birth to discover the exact moon phase, illumination percentage, and lunar image from that day.
 
-## How can I edit this code?
+✨ Features
 
-There are several ways of editing your application.
+📅 Smart date picker with easy year selection
 
-**Use Lovable**
+🌙 Accurate moon phase for selected date
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+🔆 Percentage illumination display
 
-Changes made via Lovable will be committed automatically to this repo.
+🖼 Lunar image generated via astronomy API
 
-**Use your preferred IDE**
+🎨 Minimal dark space-inspired UI
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+📱 Fully responsive design
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+🔗 Footer with professional LinkedIn integration
 
-Follow these steps:
+🚀 Tech Stack
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+React / Next.js
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Tailwind CSS
 
-# Step 3: Install the necessary dependencies.
-npm i
+Astronomy API
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+🛠 How It Works
 
-**Edit a file directly in GitHub**
+Select your date of birth.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+The app fetches lunar data from an astronomy API.
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+The moon phase, illumination, and image are displayed with smooth animations.
