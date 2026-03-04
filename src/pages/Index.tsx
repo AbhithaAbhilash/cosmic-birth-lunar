@@ -39,7 +39,7 @@ const Index = () => {
   const handleShare = async () => {
     if (!moonData || !date) return;
     const dateStr = format(date, "MMMM d, yyyy");
-    const shareText = `On ${dateStr}, the moon was a ${moonData.phaseName} (${moonData.illumination}% illuminated). ${moonData.poeticLine}\n\nCheck out yours too 🌙\nhttps://cosmic-birth-lunar.lovable.app/`;
+    const shareText = `This was my birth moon 🌙\n${moonData.phaseName} — ${moonData.illumination}% illuminated\n\nFind your moon here:\nhttps://cosmic-birth-lunar.lovable.app/`;
 
     try {
       const blob = await generateShareImage(moonData, dateStr);
