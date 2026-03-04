@@ -52,16 +52,16 @@ function drawMoon(ctx: CanvasRenderingContext2D, cx: number, cy: number, radius:
     ctx.beginPath();
     if (phase < 0.5) {
       const sweep = phase < 0.25;
-      // Shadow on left
-      ctx.arc(cx, cy, radius, -Math.PI / 2, Math.PI / 2, false);
-      ctx.ellipse(cx, cy, Math.abs(terminatorX), radius, 0, Math.PI / 2, -Math.PI / 2, sweep);
+      // Shadow on left (waxing: right side lit)
+      ctx.arc(cx, cy, radius, -Math.PI / 2, Math.PI / 2, true);
+      ctx.ellipse(cx, cy, Math.abs(terminatorX), radius, 0, Math.PI / 2, -Math.PI / 2, !sweep);
     } else {
       const adjustedAngle = (phase - 0.5) * 360;
       const waneX = Math.cos(adjustedAngle * (Math.PI / 180)) * radius;
       const sweep = phase < 0.75;
-      // Shadow on right
-      ctx.arc(cx, cy, radius, -Math.PI / 2, Math.PI / 2, true);
-      ctx.ellipse(cx, cy, Math.abs(waneX), radius, 0, Math.PI / 2, -Math.PI / 2, !sweep);
+      // Shadow on right (waning: left side lit)
+      ctx.arc(cx, cy, radius, -Math.PI / 2, Math.PI / 2, false);
+      ctx.ellipse(cx, cy, Math.abs(waneX), radius, 0, Math.PI / 2, -Math.PI / 2, sweep);
     }
     ctx.closePath();
     ctx.fillStyle = "rgba(10, 10, 20, 0.92)";
