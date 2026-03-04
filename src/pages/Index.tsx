@@ -194,29 +194,27 @@ const Index = () => {
                       className="font-body border-border text-muted-foreground hover:text-foreground hover:border-primary/50"
                     >
                       <Share2 className="w-4 h-4 mr-2" />
-                      Share
+                      Share My Moon
                     </Button>
                   ) : (
-                    <>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleDownload}
-                        className="font-body border-border text-muted-foreground hover:text-foreground hover:border-primary/50"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        Download Image
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={handleCopyLink}
-                        className="font-body border-border text-muted-foreground hover:text-foreground hover:border-primary/50"
-                      >
-                        <Share2 className="w-4 h-4 mr-2" />
-                        Copy Link
-                      </Button>
-                    </>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={async () => {
+                        if (!moonData || !date) return;
+                        try {
+                          const blob = await generateShareImage(moonData, format(date, "MMMM d, yyyy"));
+                          downloadBlob(blob, "my-birth-moon.png");
+                          toast.success("Your moon is ready to share 🌙");
+                        } catch {
+                          toast.error("Could not generate image.");
+                        }
+                      }}
+                      className="font-body border-border text-muted-foreground hover:text-foreground hover:border-primary/50"
+                    >
+                      <Share2 className="w-4 h-4 mr-2" />
+                      Share My Moon
+                    </Button>
                   )}
                   <Button
                     variant="outline"
