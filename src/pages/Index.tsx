@@ -27,33 +27,38 @@ const Index = () => {
     setDate(undefined);
   };
 
+  const canShareFiles = (() => {
+    try {
+      const file = new File(["test"], "test.png", { type: "image/png" });
+      return !!(navigator.canShare && navigator.canShare({ files: [file] }));
+    } catch {
+      return false;
+    }
+  })();
+
   const handleShare = async () => {
     if (!moonData || !date) return;
     const dateStr = format(date, "MMMM d, yyyy");
-    
+    const shareText = `On ${dateStr}, the moon was a ${moonData.phaseName} (${moonData.illumination}% illuminated). ${moonData.poeticLine}\n\nCheck out yours too 🌙\nhttps://cosmic-birth-lunar.lovable.app/`;
+
     try {
       const blob = await generateShareImage(moonData, dateStr);
       const file = new File([blob], "my-birth-moon.png", { type: "image/png" });
-      const shareText = `On ${dateStr}, the moon was a ${moonData.phaseName} (${moonData.illumination}% illuminated). ${moonData.poeticLine}\n\nCheck out yours too 🌙\nhttps://cosmic-birth-lunar.lovable.app/`;
-
-      if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({
-          title: "My Birth Moon",
-          text: shareText,
-          files: [file],
-        });
-      } else if (navigator.share) {
-        await navigator.share({ title: "My Birth Moon", text: shareText });
-      } else {
-        // Desktop fallback: download
-        downloadBlob(blob, "my-birth-moon.png");
-        toast.success("Image downloaded! Share it anywhere 🌙");
-      }
+      await navigator.share({
+        title: "My Birth Moon",
+        text: shareText,
+        files: [file],
+      });
     } catch (e: any) {
       if (e?.name !== "AbortError") {
-        toast.error("Sharing failed. Try downloading instead.");
+        // Silently fail — user cancelled or unsupported
       }
     }
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText("https://cosmic-birth-lunar.lovable.app/");
+    toast.success("Link copied to clipboard!");
   };
 
   const handleDownload = async () => {
@@ -181,24 +186,38 @@ const Index = () => {
                   transition={{ delay: 1, duration: 0.5 }}
                   className="flex gap-3 mt-4"
                 >
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleShare}
-                    className="font-body border-border text-muted-foreground hover:text-foreground hover:border-primary/50"
-                  >
-                    <Share2 className="w-4 h-4 mr-2" />
-                    Share
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleDownload}
-                    className="font-body border-border text-muted-foreground hover:text-foreground hover:border-primary/50"
-                  >
-                    <Download className="w-4 h-4 mr-2" />
-                    Download
-                  </Button>
+                  {canShareFiles ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleShare}
+                      className="font-body border-border text-muted-foreground hover:text-foreground hover:border-primary/50"
+                    >
+                      <Share2 className="w-4 h-4 mr-2" />
+                      Share
+                    </Button>
+                  ) : (
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleDownload}
+                        className="font-body border-border text-muted-foreground hover:text-foreground hover:border-primary/50"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Download Image
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleCopyLink}
+                        className="font-body border-border text-muted-foreground hover:text-foreground hover:border-primary/50"
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Copy Link
+                      </Button>
+                    </>
+                  )}
                   <Button
                     variant="outline"
                     size="sm"
