@@ -143,16 +143,6 @@ export async function generateShareImage(
   ctx.font = "italic 300 28px 'Cormorant Garamond', serif";
   wrapText(ctx, `"${moonData.poeticLine}"`, CANVAS_WIDTH / 2, 920, CANVAS_WIDTH - 160, 38);
 
-  // CTA
-  ctx.fillStyle = "rgba(180, 175, 165, 0.5)";
-  ctx.font = "400 26px 'Space Grotesk', sans-serif";
-  ctx.fillText("Check out yours too 🌙", CANVAS_WIDTH / 2, 1120);
-
-  // URL
-  ctx.fillStyle = "hsl(220, 60%, 70%)";
-  ctx.font = "400 22px 'Space Grotesk', sans-serif";
-  ctx.fillText(SITE_URL, CANVAS_WIDTH / 2, 1165);
-
   // Title at top
   ctx.fillStyle = "rgba(224, 220, 208, 0.4)";
   ctx.font = "300 32px 'Cormorant Garamond', serif";
