@@ -51,17 +51,19 @@ function drawMoon(ctx: CanvasRenderingContext2D, cx: number, cy: number, radius:
 
     ctx.beginPath();
     if (phase < 0.5) {
-      const sweep = phase < 0.25;
-      // Shadow on left (waxing: right side lit)
-      ctx.arc(cx, cy, radius, -Math.PI / 2, Math.PI / 2, true);
-      ctx.ellipse(cx, cy, Math.abs(terminatorX), radius, 0, Math.PI / 2, -Math.PI / 2, !sweep);
+      // Waxing: shadow on left, right side lit
+      // Trace: terminator (top→bottom) then left arc (bottom→top)
+      ctx.moveTo(cx, cy - radius);
+      ctx.ellipse(cx, cy, Math.abs(terminatorX), radius, 0, -Math.PI / 2, Math.PI / 2, phase >= 0.25);
+      ctx.arc(cx, cy, radius, Math.PI / 2, -Math.PI / 2, false);
     } else {
+      // Waning: shadow on right, left side lit
+      // Trace: right arc (top→bottom) then terminator (bottom→top)
       const adjustedAngle = (phase - 0.5) * 360;
       const waneX = Math.cos(adjustedAngle * (Math.PI / 180)) * radius;
-      const sweep = phase < 0.75;
-      // Shadow on right (waning: left side lit)
+      ctx.moveTo(cx, cy - radius);
       ctx.arc(cx, cy, radius, -Math.PI / 2, Math.PI / 2, false);
-      ctx.ellipse(cx, cy, Math.abs(waneX), radius, 0, Math.PI / 2, -Math.PI / 2, sweep);
+      ctx.ellipse(cx, cy, Math.abs(waneX), radius, 0, Math.PI / 2, -Math.PI / 2, phase < 0.75);
     }
     ctx.closePath();
     ctx.fillStyle = "rgba(10, 10, 20, 0.92)";
